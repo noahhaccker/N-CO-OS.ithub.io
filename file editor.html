@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple File Editor</title>
+</head>
+<body>
+    <h2>Import and Edit a File</h2>
+    <input type="file" id="fileInput">
+    <br><br>
+    <input type="text" id="fileName" placeholder="Enter file name">
+    <br><br>
+    <textarea id="textArea" rows="20" cols="80"></textarea>
+    <br><br>
+    <button id="downloadBtn">Download</button>
+    
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const textArea = document.getElementById('textArea');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const fileNameInput = document.getElementById('fileName');
+
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            if (file) {
+                fileNameInput.value = file.name;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    textArea.value = e.target.result;
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        downloadBtn.addEventListener('click', function () {
+            const text = textArea.value;
+            const fileName = fileNameInput.value.trim() || 'edited_file.txt';
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        });
+    </script>
+</body>
+</html>

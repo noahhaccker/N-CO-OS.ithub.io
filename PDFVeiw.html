@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+</head>
+<body>
+    <h1>PDF Viewer</h1>
+    <p>Select a PDF file from your computer to display it below:</p>
+    <input type="file" id="pdfInput" accept="application/pdf">
+    <br><br>
+    <iframe id="pdfViewer" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+
+    <script>
+        const pdfInput = document.getElementById('pdfInput');
+        const pdfViewer = document.getElementById('pdfViewer');
+
+        pdfInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const fileURL = URL.createObjectURL(file);
+                pdfViewer.src = fileURL;
+            } else {
+                alert('Please select a valid PDF file.');
+            }
+        });
+    </script>
+</body>
+</html>

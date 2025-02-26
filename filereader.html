@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text File Reader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text File Reader</h1>
+    <input type="file" id="fileInput" accept=".txt">
+    <textarea id="textBox" placeholder="The contents of the text file will appear here..." readonly></textarea>
+    <br>
+    <input type="text" id="fileName" placeholder="Enter file name">
+    <input type="text" id="fileType" placeholder="Enter file type (e.g., txt, html, json)">
+    <button id="downloadButton">Download File</button>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('textBox').value = e.target.result;
+                };
+                reader.readAsText(file);
+            } else {
+                document.getElementById('textBox').value = '';
+            }
+        });
+
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            const textBoxContent = document.getElementById('textBox').value;
+            const fileName = document.getElementById('fileName').value || 'default';
+            const fileType = document.getElementById('fileType').value || 'txt';
+            const blob = new Blob([textBoxContent], { type: `text/${fileType}` });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${fileName}.${fileType}`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html>
